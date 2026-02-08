@@ -203,9 +203,9 @@ These observations motivate the use of **GridSearchCV** to systematically identi
 
 ---
 
-### 8.4 Key Observation
+### 8.4 Baseline Observation
 
-> *kNN performance is highly sensitive to hyperparameter selection. While the raw model shows reasonable generalization, its performance shows competitive AUC but lower overall stability compared to Logistic Regression, highlighting the impact of the curse of dimensionality on distance-based classifiers..*
+> *kNN performance is highly sensitive to hyperparameter selection. While the raw model shows reasonable generalization, its performance shows competitive AUC but lower overall stability compared to Logistic Regression, highlighting the impact of the curse of dimensionality on distance-based classifiers.*
 
 ---
 
@@ -246,7 +246,7 @@ Compared to the raw kNN baseline, the optimized model provides **more stable and
 
 ---
 
-### 8.8 Key Observation
+### 8.8 Post-Optimization Observation
 
 > *Hyperparameter tuning improved kNN performance by reducing overfitting and stabilizing predictions. However, distance-based learning remains less effective than Logistic Regression on high-dimensional, one-hot encoded feature spaces.*
 
@@ -385,7 +385,7 @@ Compared to the raw Random Forest, the optimized model demonstrates **better bia
 
 ### 10.9 Comparison with Logistic Regression
 
-Although Random Forest benefits from ensemble learning and captures non-linear feature interactions, **Logistic Regression continues to achieve slightly higher AUC and MCC values** on the test set. This suggests that the underlying relationships in the Telco Churn dataset are largely linear, and that simpler models generalize well.
+Although Logistic Regression provides strong and stable performance with high interpretability, the optimized Random Forest outperforms it on key metrics such as Accuracy, AUC, F1 score, and MCC. This indicates that ensemble learning captures additional non-linear feature interactions present in the dataset.
 
 ---
 
@@ -478,7 +478,7 @@ The optimized XGBoost model demonstrates a **balanced bias–variance tradeoff**
 
 ## 11.9 Comparison with Other Ensemble Models
 
-Although XGBoost is a powerful boosting-based ensemble, its optimized performance is **comparable to Random Forest and slightly below Logistic Regression** on this dataset. This suggests that the Telco Churn dataset exhibits largely linear patterns, where simpler models generalize effectively.
+Although XGBoost is a powerful boosting-based ensemble, its optimized performance is comparable to Random Forest and slightly stronger than Logistic Regression in terms of AUC. However, lower recall limits its overall F1 score, making Random Forest the most balanced model for this dataset.
 
 > **Note:** Final test-set metrics reported in the comparison table below are computed using the deployed Streamlit evaluation pipeline and should be considered authoritative. Minor differences from earlier offline experiments arise due to consistent preprocessing and evaluation applied during deployment.
 
@@ -494,11 +494,19 @@ After evaluating all classification models on the same test dataset using a cons
 * Models with high variance (Decision Tree, kNN) benefit significantly from regularization and hyperparameter tuning.
 * Probabilistic models such as Naive Bayes provide high recall but suffer from lower precision, leading to higher false positives.
 
-
-## 13. Final Conclusions
 ---
 
-## Final Model Comparison
+## 13. Final Conclusions
+
+* Random Forest achieved the **best overall performance** across Accuracy, AUC, F1 score, and MCC, making it the strongest model for this dataset.
+* Logistic Regression remains a **highly competitive and interpretable baseline**, performing consistently well despite its simplicity.
+* Ensemble methods (Random Forest and XGBoost) significantly reduced overfitting compared to a single Decision Tree by improving generalization.
+* Boosting-based models such as XGBoost require careful regularization to balance expressiveness and overfitting.
+* Distance-based (kNN) and probabilistic (Naive Bayes) models provide valuable baseline insights but underperform compared to ensemble and linear models on this dataset.
+
+---
+
+## Final Model Comparison (Test Set Metrics)
 
 | ML Model Name            | Accuracy   | AUC        | Precision  | Recall     | F1         | MCC        |
 | ------------------------ | ---------- | ---------- | ---------- | ------     | ---------- | ---------- |
@@ -519,14 +527,6 @@ After evaluating all classification models on the same test dataset using a cons
 | **Naive Bayes**              | Exhibits very high recall, making it effective for identifying churners, but low precision leads to a higher false-positive rate and reduced overall accuracy.      |
 | **Random Forest (Ensemble)** | Achieves the best overall performance across most metrics, including Accuracy, AUC, F1, and MCC, indicating strong generalization and robustness.                   |
 | **XGBoost (Ensemble)**       | Provides strong performance close to Random Forest, effectively capturing non-linear patterns, but slightly lower recall limits its overall F1 score.               |
-
----
-
-* Random Forest achieved the **best overall performance** across Accuracy, AUC, F1 score, and MCC, making it the strongest model for this dataset.
-* Logistic Regression remains a **highly competitive and interpretable baseline**, performing consistently well despite its simplicity.
-* Ensemble methods (Random Forest and XGBoost) significantly reduced overfitting compared to a single Decision Tree by improving generalization.
-* Boosting-based models such as XGBoost require careful regularization to balance expressiveness and overfitting.
-* Distance-based (kNN) and probabilistic (Naive Bayes) models provide valuable baseline insights but underperform compared to ensemble and linear models on this dataset.
 
 ---
 
@@ -555,7 +555,7 @@ All metrics displayed in the application correspond to **test-set performance**,
 The application will open in a web browser, where trained models can be evaluated on uploaded test datasets.
 
 ## Streamlit Application Link
-"https://telco-churn-ml-2025aa05845.streamlit.app/"
+[Telco Churn Streamlit App](https://telco-churn-ml-2025aa05845.streamlit.app/)
 
 ---
 

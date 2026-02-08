@@ -555,8 +555,7 @@ All metrics displayed in the application correspond to **test-set performance**,
 The application will open in a web browser, where trained models can be evaluated on uploaded test datasets.
 
 ## Streamlit Application Link
-
-(Streamlit Cloud deployment link to be added here)
+"https://telco-churn-ml-2025aa05845.streamlit.app/"
 
 
 ## 15. Final Model Recommendation

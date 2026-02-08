@@ -56,7 +56,7 @@ uploaded_file = st.sidebar.file_uploader(
 submit_clicked = st.sidebar.button("Evaluate Model")
 
 
-st.sidebar.markdown("### 📥 Sample Test Dataset")
+st.sidebar.markdown("### Sample Test Dataset")
 
 with open("data/telco_test_data.csv", "rb") as f:
     st.sidebar.download_button(
@@ -82,21 +82,21 @@ def load_model(model_path):
 if submit_clicked:
 
     if selected_model_name == "-- Select Model --":
-        st.error("❌ Please select a machine learning model.")
+        st.error("Please select a machine learning model.")
         st.stop()
 
     if uploaded_file is None:
-        st.error("❌ Please upload a test dataset (CSV).")
+        st.error("Please upload a test dataset (CSV).")
         st.stop()
 
     try:
         df = pd.read_csv(uploaded_file)
 
         if "Churn" not in df.columns:
-            st.error("❌ Uploaded dataset must contain the 'Churn' column.")
+            st.error("Uploaded dataset must contain the 'Churn' column.")
             st.stop()
 
-        # st.subheader("📁 Uploaded Dataset Preview")
+        # st.subheader("Uploaded Dataset Preview")
         # st.dataframe(df.head())
 
         df = clean_data(df)
@@ -105,18 +105,18 @@ if submit_clicked:
         model_path = MODEL_PATHS[selected_model_name]
         model = load_model(model_path)
 
-        # 🔄 Spinner added
-        with st.spinner("⏳ Evaluating model on test dataset..."):
+        # Spinner added
+        with st.spinner("Evaluating model on test dataset..."):
             metrics = evaluate_model(model, X, y)
             cm_df = get_confusion_matrix(model, X, y)
 
-        st.subheader(f"📌 Evaluation Results – {selected_model_name}")
+        st.subheader(f"Evaluation Results – {selected_model_name}")
 
         col1, col2 = st.columns(2)
 
         # ---------------- Metrics Table ----------------
         with col1:
-            st.markdown("### 🔢 Performance Metrics")
+            st.markdown("### Performance Metrics")
 
             metrics_df = pd.DataFrame(
                 metrics.items(),
@@ -133,7 +133,7 @@ if submit_clicked:
                 )
 
             st.download_button(
-                "⬇️ Download Metrics (CSV)",
+                " Download Metrics (CSV)",
                 data=metrics_df.to_csv(index=False),
                 file_name=f"{selected_model_name}_metrics.csv",
                 mime="text/csv"
@@ -141,21 +141,21 @@ if submit_clicked:
 
         # ---------------- Confusion Matrix ----------------
         with col2:
-            st.markdown("### 📉 Confusion Matrix")
+            st.markdown("### Confusion Matrix")
 
             center_col = st.columns([1, 3, 1])[1]
             with center_col:
                 st.table(cm_df)
 
             st.download_button(
-                "⬇️ Download Confusion Matrix (CSV)",
+                " Download Confusion Matrix (CSV)",
                 data=cm_df.to_csv(),
                 file_name=f"{selected_model_name}_confusion_matrix.csv",
                 mime="text/csv"
             )
 
     except Exception as e:
-        st.error("❌ An error occurred during evaluation.")
+        st.error(" An error occurred during evaluation.")
         st.exception(e)
 
 else:

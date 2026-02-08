@@ -55,6 +55,18 @@ uploaded_file = st.sidebar.file_uploader(
 
 submit_clicked = st.sidebar.button("Evaluate Model")
 
+
+st.sidebar.markdown("### 📥 Sample Test Dataset")
+
+with open("data/telco_test_data.csv", "rb") as f:
+    st.sidebar.download_button(
+        label="Download Test Dataset (CSV)",
+        data=f,
+        file_name="telco_test_data.csv",
+        mime="text/csv"
+    )
+
+
 # --------------------------------------------------
 # Load Model (Lazy Loading)
 # --------------------------------------------------
@@ -116,7 +128,8 @@ if submit_clicked:
                 st.dataframe(
                     metrics_df,
                     hide_index=True,
-                    use_container_width=True
+                    #use_container_width=True,
+                    width="stretch"
                 )
 
             st.download_button(

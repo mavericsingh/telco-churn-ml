@@ -166,21 +166,15 @@ To address overfitting, hyperparameter tuning was performed using **GridSearchCV
 
 ---
 
-## 8. Key Insight
+## 8. k-Nearest Neighbors (kNN)
 
-Although hyperparameter tuning significantly improved Decision Tree performance, **Logistic Regression still generalizes better**, indicating that linear decision boundaries are sufficient for this dataset.
-
----
-
-## 9. k-Nearest Neighbors (kNN)
-
-### 9.1 Raw kNN (Baseline)
+### 8.1 Raw kNN (Baseline)
 
 A baseline k-Nearest Neighbors classifier was trained using default parameters (`k = 5`, uniform weights) to study its behavior before hyperparameter tuning. This experiment helps analyze the sensitivity of kNN to neighborhood size and its tendency to overfit in high-dimensional feature spaces.
 
 ---
 
-### 9.2 Performance Metrics (Raw kNN)
+### 8.2 Performance Metrics (Raw kNN)
 
 | Metric    | Training | Validation | Test   |
 | --------- | -------- | ---------- | ------ |
@@ -193,7 +187,7 @@ A baseline k-Nearest Neighbors classifier was trained using default parameters (
 
 ---
 
-### 9.3 Overfitting and Sensitivity Analysis
+### 8.3 Overfitting and Sensitivity Analysis
 
 The raw kNN model achieved strong training performance but exhibited a noticeable drop in validation and test performance. This indicates **moderate overfitting**, which is expected for kNN with a small neighborhood size.
 
@@ -209,9 +203,9 @@ These observations motivate the use of **GridSearchCV** to systematically identi
 
 ---
 
-### 9.4 Key Observation
+### 8.4 Key Observation
 
-> *kNN performance is highly sensitive to hyperparameter selection. While the raw model shows reasonable generalization, its performance remains below Logistic Regression, highlighting the impact of the curse of dimensionality on distance-based classifiers.*
+> *kNN performance is highly sensitive to hyperparameter selection. While the raw model shows reasonable generalization, its performance shows competitive AUC but lower overall stability compared to Logistic Regression, highlighting the impact of the curse of dimensionality on distance-based classifiers..*
 
 ---
 
@@ -219,14 +213,14 @@ These observations motivate the use of **GridSearchCV** to systematically identi
 
 The raw kNN model is included as a **baseline experiment**. The final kNN results used are obtained after hyperparameter tuning using GridSearchCV.
 
-### 9.5 kNN with GridSearchCV (Optimized)
+### 8.5 kNN with GridSearchCV (Optimized)
 
 To improve upon the raw kNN baseline, **GridSearchCV** was applied to systematically tune the number of neighbors (`k`) and the neighbor weighting strategy.
 The grid search used **5-fold cross-validation** and optimized the **AUC** metric to handle class imbalance.
 
 ---
 
-### 9.6 Performance Metrics (GridSearch Optimized kNN)
+### 8.6 Performance Metrics (GridSearch Optimized kNN)
 
 | Metric    | Training | Validation | Test   |
 | --------- | -------- | ---------- | ------ |
@@ -239,7 +233,7 @@ The grid search used **5-fold cross-validation** and optimized the **AUC** metri
 
 ---
 
-### 9.7 Optimization Analysis
+### 8.7 Optimization Analysis
 
 Hyperparameter tuning significantly improved kNN generalization performance:
 
@@ -252,13 +246,15 @@ Compared to the raw kNN baseline, the optimized model provides **more stable and
 
 ---
 
-### 9.8 Key Observation
+### 8.8 Key Observation
 
 > *Hyperparameter tuning improved kNN performance by reducing overfitting and stabilizing predictions. However, distance-based learning remains less effective than Logistic Regression on high-dimensional, one-hot encoded feature spaces.*
 
-## 10. Naive Bayes Classifier
+---
 
-### 10.1 Model Description
+## 9. Naive Bayes Classifier
+
+### 9.1 Model Description
 
 A **Gaussian Naive Bayes** classifier was implemented as a baseline probabilistic model.
 Naive Bayes assumes conditional independence among features given the class label, which is a strong assumption but often yields competitive results in high-dimensional settings.
@@ -267,7 +263,7 @@ A separate preprocessing pipeline was used to convert categorical features into 
 
 ---
 
-### 10.2 Performance Metrics (Raw Naive Bayes)
+### 9.2 Performance Metrics (Raw Naive Bayes)
 
 | Metric    | Training | Validation | Test   |
 | --------- | -------- | ---------- | ------ |
@@ -280,7 +276,7 @@ A separate preprocessing pipeline was used to convert categorical features into 
 
 ---
 
-### 10.3 Bias–Variance and Behavior Analysis
+### 9.3 Bias–Variance and Behavior Analysis
 
 The Naive Bayes classifier demonstrates **low variance and high bias**, as indicated by the close alignment of training, validation, and test metrics. Unlike Decision Trees and kNN, Naive Bayes does not overfit the training data.
 
@@ -295,19 +291,21 @@ This behavior is expected, as Naive Bayes prioritizes probabilistic coverage ove
 
 ---
 
-### 10.4 Key Observation
+### 9.4 Key Observation
 
 > *Naive Bayes achieves high recall with stable generalization across datasets, making it suitable for scenarios where identifying potential churners is more important than minimizing false positives.*
 
-## 11. Random Forest Classifier
+---
 
-### 11.1 Raw Random Forest (Baseline)
+## 10. Random Forest Classifier
+
+### 10.1 Raw Random Forest (Baseline)
 
 A Random Forest classifier was trained using default hyperparameters to evaluate its baseline performance and compare it with a single Decision Tree. Random Forest combines multiple decision trees trained on bootstrapped samples with feature randomness to reduce variance and improve generalization.
 
 ---
 
-### 11.2 Performance Metrics (Raw Random Forest)
+### 10.2 Performance Metrics (Raw Random Forest)
 
 | Metric    | Training | Validation | Test   |
 | --------- | -------- | ---------- | ------ |
@@ -320,7 +318,7 @@ A Random Forest classifier was trained using default hyperparameters to evaluate
 
 ---
 
-### 11.3 Overfitting Analysis
+### 10.3 Overfitting Analysis
 
 The raw Random Forest model achieved near-perfect performance on the training dataset, indicating that the individual trees were able to memorize training samples. However, validation and test performance were substantially lower, revealing **moderate to severe overfitting**.
 
@@ -335,18 +333,18 @@ These results highlight that **Random Forest still requires explicit regularizat
 
 ---
 
-### 11.4 Key Observation
+### 10.4 Key Observation
 
 > *Random Forest improves generalization compared to a single Decision Tree but can still overfit when tree depth and leaf size are unconstrained, emphasizing the need for hyperparameter tuning.*
 
-## 11.5 Random Forest with GridSearchCV (Optimized)
+## 10.5 Random Forest with GridSearchCV (Optimized)
 
 To mitigate overfitting observed in the raw Random Forest model, **GridSearchCV** was applied to tune key hyperparameters controlling tree complexity and ensemble diversity.
 The grid search used **5-fold cross-validation** and optimized the **AUC** metric to ensure robust class separation under class imbalance.
 
 ---
 
-### 11.6 Best Hyperparameters (GridSearchCV)
+### 10.6 Best Hyperparameters (GridSearchCV)
 
 The following hyperparameters were selected by GridSearchCV:
 
@@ -359,7 +357,7 @@ Although tree depth was not explicitly limited, enforcing a minimum number of sa
 
 ---
 
-### 11.7 Performance Metrics (Optimized Random Forest)
+### 10.7 Performance Metrics (Optimized Random Forest)
 
 | Metric    | Training | Validation | Test   |
 | --------- | -------- | ---------- | ------ |
@@ -372,7 +370,7 @@ Although tree depth was not explicitly limited, enforcing a minimum number of sa
 
 ---
 
-### 11.8 Optimization Analysis
+### 10.8 Optimization Analysis
 
 Hyperparameter tuning significantly reduced overfitting in the Random Forest model:
 
@@ -385,19 +383,21 @@ Compared to the raw Random Forest, the optimized model demonstrates **better bia
 
 ---
 
-### 11.9 Comparison with Logistic Regression
+### 10.9 Comparison with Logistic Regression
 
 Although Random Forest benefits from ensemble learning and captures non-linear feature interactions, **Logistic Regression continues to achieve slightly higher AUC and MCC values** on the test set. This suggests that the underlying relationships in the Telco Churn dataset are largely linear, and that simpler models generalize well.
 
-## 12. XGBoost Classifier
+---
 
-### 12.1 Raw XGBoost (Baseline)
+## 11. XGBoost Classifier
+
+### 11.1 Raw XGBoost (Baseline)
 
 XGBoost was implemented as a boosting-based ensemble model to evaluate its baseline performance on the Telco Customer Churn dataset. Unlike Random Forest, which uses bagging, XGBoost builds trees sequentially, focusing on correcting errors made by previous models.
 
 ---
 
-### 12.2 Performance Metrics (Raw XGBoost)
+### 11.2 Performance Metrics (Raw XGBoost)
 
 | Metric    | Training | Validation | Test   |
 | --------- | -------- | ---------- | ------ |
@@ -410,7 +410,7 @@ XGBoost was implemented as a boosting-based ensemble model to evaluate its basel
 
 ---
 
-### 12.3 Overfitting Analysis
+### 11.3 Overfitting Analysis
 
 The raw XGBoost model achieved strong performance on the training dataset, indicating its ability to fit complex decision boundaries. However, a noticeable drop in validation and test performance reveals **moderate overfitting**.
 
@@ -425,18 +425,18 @@ These results highlight that **boosting-based ensembles are highly expressive an
 
 ---
 
-### 12.4 Key Observation
+### 11.4 Key Observation
 
 > *While XGBoost captures complex non-linear relationships effectively, its boosting mechanism can lead to overfitting when model complexity is not controlled, necessitating hyperparameter tuning.*
 
 
-## 12.5 XGBoost with GridSearchCV (Optimized)
+## 11.5 XGBoost with GridSearchCV (Optimized)
 
 To address the overfitting observed in the raw XGBoost model, **GridSearchCV** was applied to tune key boosting and regularization parameters. The grid search used **5-fold cross-validation** and optimized the **AUC** metric to balance model complexity and generalization performance.
 
 ---
 
-### 12.6 Best Hyperparameters (GridSearchCV)
+### 11.6 Best Hyperparameters (GridSearchCV)
 
 The following hyperparameters were selected by GridSearchCV:
 
@@ -450,7 +450,7 @@ These parameters significantly reduce model complexity by using shallow trees, a
 
 ---
 
-### 12.7 Performance Metrics (Optimized XGBoost)
+### 11.7 Performance Metrics (Optimized XGBoost)
 
 | Metric    | Training | Validation | Test   |
 | --------- | -------- | ---------- | ------ |
@@ -463,7 +463,7 @@ These parameters significantly reduce model complexity by using shallow trees, a
 
 ---
 
-### 12.8 Optimization Analysis
+### 11.8 Optimization Analysis
 
 Hyperparameter tuning successfully reduced overfitting in XGBoost:
 
@@ -476,15 +476,29 @@ The optimized XGBoost model demonstrates a **balanced bias–variance tradeoff**
 
 ---
 
-### 12.9 Comparison with Other Ensemble Models
+## 11.9 Comparison with Other Ensemble Models
 
 Although XGBoost is a powerful boosting-based ensemble, its optimized performance is **comparable to Random Forest and slightly below Logistic Regression** on this dataset. This suggests that the Telco Churn dataset exhibits largely linear patterns, where simpler models generalize effectively.
+
+> **Note:** Final test-set metrics reported in the comparison table below are computed using the deployed Streamlit evaluation pipeline and should be considered authoritative. Minor differences from earlier offline experiments arise due to consistent preprocessing and evaluation applied during deployment.
+
+---
+
+## 12. Key Insights Across All Models
+
+After evaluating all classification models on the same test dataset using a consistent preprocessing and evaluation pipeline, the following key insights were observed:
+
+* Ensemble-based models generally outperform individual learners by capturing non-linear feature interactions, particularly when properly regularized.
+* **Random Forest emerged as the best-performing model overall**, achieving the highest Accuracy, AUC, F1 score, and MCC.
+* Logistic Regression remains a strong and interpretable baseline, offering competitive performance despite its simplicity.
+* Models with high variance (Decision Tree, kNN) benefit significantly from regularization and hyperparameter tuning.
+* Probabilistic models such as Naive Bayes provide high recall but suffer from lower precision, leading to higher false positives.
 
 
 ## 13. Final Conclusions
 ---
 
-## Updated Final Model Comparison
+## Final Model Comparison
 
 | ML Model Name            | Accuracy   | AUC        | Precision  | Recall     | F1         | MCC        |
 | ------------------------ | ---------- | ---------- | ---------- | ------     | ---------- | ---------- |
@@ -494,30 +508,59 @@ Although XGBoost is a powerful boosting-based ensemble, its optimized performanc
 | Naive Bayes              | 0.6556     | 0.8114     | 0.4263     | **0.8541** | 0.5687     | 0.3877     |
 | Random Forest (Ensemble) | **0.8259** | **0.8920** | **0.7513** | 0.5160     | **0.6118** | **0.5193** |
 | XGBoost (Ensemble)       | 0.8117     | 0.8595     | 0.7050     | 0.5018     | 0.5863     | 0.4802     |
-|
 
 ---
 
-| ML Model Name                | Observation about model performance                                                                                                                         |
-| ---------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **Logistic Regression**      | Demonstrates stable and consistent generalization with balanced performance across metrics. Strong baseline with good interpretability and competitive AUC. |
-| **Decision Tree**            | Performs reasonably after regularization but shows slightly lower recall, reflecting sensitivity to data splits and inherent high variance.                 |
-| **kNN**                      | Achieves competitive AUC and balanced F1 score but remains sensitive to feature scaling and high dimensionality due to one-hot encoding.                    |
-| **Naive Bayes**              | Exhibits very high recall, making it effective for identifying churners, but low precision leads to more false positives.                                   |
-| **Random Forest (Ensemble)** | Achieves the best overall performance with highest Accuracy, AUC, F1, and MCC, indicating strong generalization and robustness.                             |
-| **XGBoost (Ensemble)**       | Provides strong performance close to Random Forest, capturing non-linear patterns effectively, but slightly lower recall limits F1 score.                   |
-
-
----
-
-* Logistic Regression achieved the **best overall performance** in terms of AUC, F1 score, and MCC
-* Ensemble methods (Random Forest and XGBoost) significantly reduced overfitting compared to single Decision Trees
-* Boosting-based models require careful regularization to avoid overfitting
-* Distance-based and probabilistic models provide valuable baseline insights but underperform compared to linear and ensemble methods
-* Simpler models can outperform complex models when underlying data relationships are largely linear
+| ML Model Name                | Observation about model performance                                                                                                                                 |
+| ---------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Logistic Regression**      | Demonstrates stable and consistent generalization with balanced performance across metrics. Acts as a strong and interpretable baseline with competitive AUC.       |
+| **Decision Tree**            | Shows improved generalization after regularization, but performance remains limited by lower recall and sensitivity to data splits due to high variance.            |
+| **kNN**                      | Achieves competitive AUC and balanced F1 score after tuning, but remains sensitive to feature scaling and high dimensionality caused by one-hot encoding.           |
+| **Naive Bayes**              | Exhibits very high recall, making it effective for identifying churners, but low precision leads to a higher false-positive rate and reduced overall accuracy.      |
+| **Random Forest (Ensemble)** | Achieves the best overall performance across most metrics, including Accuracy, AUC, F1, and MCC, indicating strong generalization and robustness.                   |
+| **XGBoost (Ensemble)**       | Provides strong performance close to Random Forest, effectively capturing non-linear patterns, but slightly lower recall limits its overall F1 score.               |
 
 ---
 
-## Final Model Recommendation
+* Random Forest achieved the **best overall performance** across Accuracy, AUC, F1 score, and MCC, making it the strongest model for this dataset.
+* Logistic Regression remains a **highly competitive and interpretable baseline**, performing consistently well despite its simplicity.
+* Ensemble methods (Random Forest and XGBoost) significantly reduced overfitting compared to a single Decision Tree by improving generalization.
+* Boosting-based models such as XGBoost require careful regularization to balance expressiveness and overfitting.
+* Distance-based (kNN) and probabilistic (Naive Bayes) models provide valuable baseline insights but underperform compared to ensemble and linear models on this dataset.
 
-> *Based on empirical evaluation across multiple metrics and datasets, Logistic Regression is selected as the final recommended model for Telco Customer Churn prediction due to its strong generalization, stability, and interpretability.*
+---
+
+## 14. Deployment: Streamlit Application
+
+A Streamlit-based web application was developed to allow interactive evaluation of all trained machine learning models on user-uploaded test datasets.
+
+The application enables the user to:
+- Select one of the trained models
+- Upload a test dataset in CSV format
+- Evaluate the selected model on the uploaded dataset
+- View test-set performance metrics and confusion matrix
+- Download evaluation results for further analysis
+
+The application performs **evaluation only** using pre-trained models and does not retrain any model.  
+All metrics displayed in the application correspond to **test-set performance**, consistent with the results reported in this README.
+
+---
+
+## How to Run the Project
+
+1. Clone the GitHub repository.
+2. Install required dependencies: pip install -r requirements.txt
+3. Run the Streamlit application: streamlit run app.py
+
+The application will open in a web browser, where trained models can be evaluated on uploaded test datasets.
+
+## Streamlit Application Link
+
+(Streamlit Cloud deployment link to be added here)
+
+
+## 15. Final Model Recommendation
+
+> *Based on empirical evaluation across all models using test-set performance metrics, **Random Forest (Ensemble)** is selected as the final recommended model for Telco Customer Churn prediction due to its superior Accuracy, AUC, F1 score, and MCC.*
+
+> *Logistic Regression remains a strong and interpretable baseline model and may be preferred in scenarios where simplicity and explainability are prioritized over marginal performance gains.*
